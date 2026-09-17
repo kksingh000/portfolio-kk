@@ -1,0 +1,23 @@
+:root{
+  /* Shadows read as 3D contact shadows: neutral, low-spread, never colored (except accent glow) */
+  --shadow-contact:0 1px 2px rgba(10,10,10,.06),0 2px 8px rgba(10,10,10,.05);
+  --shadow-raised:0 2px 4px rgba(10,10,10,.06),0 12px 28px rgba(10,10,10,.10);
+  --shadow-float:0 8px 16px rgba(10,10,10,.10),0 32px 64px rgba(10,10,10,.18);
+  --shadow-plane:0 40px 80px -24px rgba(10,10,10,.45);  /* hero photo plane in-space drop */
+  --shadow-inset-hair:inset 0 0 0 1px var(--border-subtle);
+
+  /* Accent glow — hover / focus / current only */
+  --glow-sm:0 0 0 1px var(--teal-500),0 0 12px var(--teal-a35);
+  --glow-md:0 0 0 1px var(--teal-500),0 0 28px var(--teal-a35);
+  --glow-waterline:0 0 24px 2px var(--teal-a35);
+  --ring-focus:0 0 0 2px var(--bg-page),0 0 0 4px var(--focus-ring); /* @kind shadow */
+
+  --blur-chip:saturate(120%) blur(10px); /* @kind other */
+  --blur-scrim:blur(24px); /* @kind other */
+  --scrim-top:linear-gradient(to bottom,rgba(10,10,10,.65),rgba(10,10,10,0)); /* @kind other */
+  --scrim-bottom:linear-gradient(to top,rgba(10,10,10,.75),rgba(10,10,10,0)); /* @kind other */
+
+  --grain-opacity:.035; /* @kind other */
+  --desaturate-photo:grayscale(.72) contrast(1.04); /* @kind other */
+  --desaturate-thumb:grayscale(1) brightness(.92); /* @kind other */
+}

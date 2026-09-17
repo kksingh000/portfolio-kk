@@ -1,0 +1,60 @@
+:root{
+  /* Base ramp — the only colors allowed in a default, non-interactive state */
+  --shell-000:#F5F4F0;   /* shell white — page ground */
+  --shell-100:#EDEBE5;   /* shell white, one step down (derived) */
+  --gray-200:#D4D4D6;
+  --gray-400:#9A9A9E;
+  --gray-600:#5C5C61;
+  --gray-800:#2B2B2E;
+  --ink-900:#0A0A0A;     /* near-black — 3D depth ground */
+
+  /* Accent — interactive states ONLY (hover, active, focus, current) */
+  --teal-500:#2DD4CF;
+  --teal-600:#1FAFAB;    /* pressed / on-light text (derived) */
+  --teal-300:#7FE6E3;    /* glow core (derived) */
+  --teal-a35:rgba(45,212,207,.35);
+  --teal-a12:rgba(45,212,207,.12);
+
+  /* Semantic — light shell surfaces */
+  --bg-page:var(--shell-000);
+  --bg-sunken:var(--shell-100);
+  --surface-card:var(--shell-000);
+  --surface-raised:#FFFFFF;
+  --text-primary:var(--ink-900);
+  --text-secondary:var(--gray-600);
+  --text-muted:var(--gray-400);
+  --text-inverse:var(--shell-000);
+  --border-subtle:var(--gray-200);
+  --border-strong:var(--gray-400);
+
+  /* Semantic — interactive */
+  --accent:var(--teal-500);
+  --accent-pressed:var(--teal-600);
+  --accent-on-light:var(--teal-600);  /* accent text on shell white, 3.1:1+ */
+  --accent-wash:var(--teal-a12);
+  --focus-ring:var(--teal-500);
+  --waterline:var(--teal-500);
+
+  /* 3D scene colors */
+  --scene-water:#1B1B1E;
+  --scene-water-deep:#101012;
+  --scene-foam:var(--shell-000);
+  --scene-ice-above:#E7E6E1;
+  --scene-ice-below:#7E8A8C;
+  --scene-fog:rgba(10,10,10,.72);
+}
+
+/* Deep scope — the ocean / iceberg scenes and any dark panel */
+[data-theme="deep"]{
+  --bg-page:var(--ink-900);
+  --bg-sunken:#050506;
+  --surface-card:var(--gray-800);
+  --surface-raised:#35353A;
+  --text-primary:var(--shell-000);
+  --text-secondary:var(--gray-200);
+  --text-muted:var(--gray-400);
+  --text-inverse:var(--ink-900);
+  --border-subtle:#3A3A3E;
+  --border-strong:var(--gray-600);
+  --accent-on-light:var(--teal-500);
+}
