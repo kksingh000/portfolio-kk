@@ -1,0 +1,308 @@
+/* The design system's own token entry point — do not re-declare any value it owns. */
+@import "../../styles.css";
+
+/*
+ * Resting colour for 11px mono labels.
+ *
+ * `--text-muted` (gray-400) is 6.9:1 on the near-black ground and 2.55:1 on
+ * shell white — below the 4.5:1 AA floor for text this size, and it carries the
+ * form field labels. This is an alias over two existing tokens, not a new
+ * value: the light ground steps down to `--text-secondary` (6.2:1), the deep
+ * ground keeps `--text-muted` and looks exactly as before. The system already
+ * makes this kind of per-ground swap for accent text via `--accent-on-light`.
+ */
+:root {
+  --text-label-rest: var(--text-secondary);
+}
+
+[data-theme="deep"] {
+  --text-label-rest: var(--text-muted);
+
+  /*
+   * `--ring-focus` is declared on :root, so the `var(--bg-page)` inside it is
+   * substituted once, at the light ground, and the resolved string inherits
+   * down — leaving a shell-white halo around focused elements on the dark
+   * pages. Re-declaring it here makes the offset match the ground it sits on,
+   * which is what "a 2px teal ring offset by the page color" means.
+   */
+  --ring-focus: 0 0 0 2px var(--ink-900), 0 0 0 4px var(--focus-ring);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  /* four full-viewport pages; proximity rather than mandatory so the taller
+     contact page is never trapped mid-scroll */
+  scroll-snap-type: y proximity;
+  background: var(--ink-900);
+}
+
+body {
+  margin: 0;
+  background: var(--bg-page);
+  color: var(--text-primary);
+  font-family: var(--font-mono);
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  overflow-x: hidden;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+/* Focus is a 2px teal ring offset by the page color — never a browser outline. */
+:focus {
+  outline: none;
+}
+
+/*
+ * `!important` is load-bearing: every design-system component sets `boxShadow`
+ * as an inline style, and an inline value beats a stylesheet rule — without
+ * this the ring silently never renders on buttons, cards, inputs or the focus
+ * panel. The element keeps its own border-radius so the ring follows its shape.
+ */
+:focus-visible {
+  outline: none;
+  box-shadow: var(--ring-focus) !important;
+}
+
+::selection {
+  background: var(--teal-a35);
+  color: var(--text-primary);
+}
+
+/* ---- page shell ------------------------------------------------------- */
+
+.page {
+  position: relative;
+  min-height: 100vh;
+  min-height: 100svh;
+  padding: var(--page-pad-y) var(--page-pad-x);
+  scroll-snap-align: start;
+}
+
+.page--deep {
+  background: var(--ink-900);
+  color: var(--text-primary);
+}
+
+.page__inner {
+  max-width: var(--container);
+  margin: 0 auto;
+  width: 100%;
+}
+
+/* ---- display + mono primitives ---------------------------------------- */
+
+.display {
+  font-family: var(--font-display);
+  font-weight: var(--weight-semibold);
+  letter-spacing: var(--tracking-display);
+  line-height: var(--leading-display);
+  font-variation-settings: var(--fraunces-display);
+  margin: 0;
+}
+
+.display--hero {
+  font-size: var(--text-hero);
+  line-height: var(--leading-tight);
+  letter-spacing: var(--tracking-hero);
+}
+
+.display--page {
+  font-size: var(--text-display);
+}
+
+.display--title {
+  font-size: var(--text-title);
+  font-variation-settings: var(--fraunces-text);
+}
+
+.mono-label {
+  font-family: var(--font-mono);
+  font-size: var(--text-micro);
+  letter-spacing: var(--tracking-micro);
+  text-transform: uppercase;
+  color: var(--text-label-rest);
+}
+
+.mono-label--wide {
+  font-size: var(--text-label);
+  letter-spacing: var(--tracking-label);
+  color: var(--text-secondary);
+}
+
+.prose {
+  font-family: var(--font-mono);
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body);
+  color: var(--text-secondary);
+  max-width: 46ch;
+  margin: 0;
+}
+
+/* ---- fixed chrome ----------------------------------------------------- */
+
+/* mix-blend-mode: difference so one nav survives both grounds */
+.page-nav {
+  position: fixed;
+  top: var(--space-5);
+  right: var(--page-pad-x);
+  z-index: 40;
+  display: flex;
+  gap: var(--space-4);
+  mix-blend-mode: difference;
+  color: var(--shell-000);
+}
+
+.page-nav__item {
+  font-family: var(--font-mono);
+  font-size: var(--text-micro);
+  letter-spacing: var(--tracking-micro);
+  text-transform: uppercase;
+  color: inherit;
+  text-decoration: none;
+  opacity: 0.55;
+  transition: opacity var(--dur-fast) var(--ease-out);
+}
+
+.page-nav__item:hover,
+.page-nav__item[data-current="true"] {
+  opacity: 1;
+}
+
+.scroll-cue-fixed {
+  position: fixed;
+  bottom: var(--space-5);
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 40;
+  mix-blend-mode: difference;
+  pointer-events: none;
+}
+
+/* ---- 3D scene canvases ------------------------------------------------ */
+
+.scene {
+  position: absolute;
+  inset: 0;
+  touch-action: pan-y;
+}
+
+.scene--grab {
+  cursor: grab;
+}
+
+.scene--grabbing {
+  cursor: grabbing;
+}
+
+/* drei <Html> wrappers must not eat scroll or clicks they do not own */
+.scene-html {
+  pointer-events: none;
+}
+
+.scene-html > * {
+  pointer-events: auto;
+}
+
+/* ---- layout grids ----------------------------------------------------- */
+
+.hero-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.95fr) minmax(0, 0.9fr);
+  gap: var(--space-7);
+  align-items: center;
+}
+
+.split-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);
+  gap: var(--space-8);
+  align-items: center;
+}
+
+/* 02 — copy column beside the scene, which takes the optical center */
+.stack-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 360px) minmax(0, 1fr);
+  gap: var(--space-8);
+  align-items: center;
+  min-height: calc(100vh - 2 * var(--page-pad-y));
+}
+
+.stack-scene {
+  position: relative;
+  height: min(78vh, 760px);
+  min-height: 460px;
+}
+
+/* the hero portrait is a plane in space, not a hero image — cap it when stacked */
+.hero-portrait {
+  width: 100%;
+  max-width: 420px;
+}
+
+.contact-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+  gap: var(--space-8);
+}
+
+@media (max-width: 1320px) {
+  .stack-grid {
+    grid-template-columns: minmax(0, 272px) minmax(0, 1fr);
+    gap: var(--space-6);
+  }
+
+  .stack-grid .display--page {
+    font-size: var(--text-title);
+  }
+}
+
+@media (max-width: 1080px) {
+  .hero-grid,
+  .split-grid,
+  .contact-grid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--space-7);
+  }
+
+  .hero-grid {
+    justify-items: start;
+  }
+}
+
+/* Below this width the scene is not rendered at all (see useSceneEnabled),
+   so the copy column stops competing with it and the ranked list takes over. */
+@media (max-width: 1180px) {
+  .stack-grid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--space-7);
+    min-height: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+    scroll-snap-type: none;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
